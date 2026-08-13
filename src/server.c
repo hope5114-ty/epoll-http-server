@@ -27,7 +27,7 @@ static void signal_handler(int sig) {
 
 // 注册信号处理函数
 // 捕获Ctrl+C、kill终止信号；忽略SIGPIPE，防止客户端断开造成进程退出
-static void setup_signals(void) {
+static void setup_signals(void){
     signal(SIGINT, signal_handler);   // Ctrl+C
     signal(SIGTERM, signal_handler);  // kill终止信号
     signal(SIGPIPE, SIG_IGN);         // 忽略管道破裂信号
@@ -40,13 +40,14 @@ static void setup_signals(void) {
 // fd：待设置的文件描述符
 // return：成功返回0，失败返回-1
 static int set_nonblocking(int fd) {
+    //获取当前flags
     int flags = fcntl(fd, F_GETFL, 0);
     if (flags == -1) {
         perror("fcntl F_GETFL 失败");
         return -1;
     }
 
-    // 添加非阻塞标志
+    // 添加非阻塞标志，read/write 没数据时立刻返回，不卡住
     if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1) {
         perror("fcntl F_SETFL 失败");
         return -1;
@@ -76,7 +77,7 @@ int server_init(const server_config_t *config) {
         return -1;
     }
 
-    // 填充服务器地址结构，监听0.0.0.0
+    // 填充服务器地址结构，监听
     struct sockaddr_in addr;
     memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
