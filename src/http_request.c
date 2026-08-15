@@ -41,7 +41,7 @@ static int build_file_path(const char *web_root, const char *uri,
     return 0;
 }
 
-// 获取文件大小，使用open + lseek实现，不调用stat/fstat
+// 获取文件大小，使用open + lseek实现
 // file_path：文件路径
 // out_fd：输出打开后的文件描述符
 // return：成功返回文件字节大小，失败返回-1
