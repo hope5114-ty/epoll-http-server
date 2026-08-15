@@ -3,132 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>欢迎 - Simple HTTP Server</title>
+    <title>Hope's Server</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .container {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        h1 {
+            font-family: -apple-system, "Microsoft YaHei", sans-serif;
+            background: #fff;
             color: #333;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-align: center;
+            max-width: 600px;
+            margin: 80px auto;
+            padding: 0 20px;
         }
-        .subtitle {
-            color: #666;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 1.1em;
+        h1 { font-size: 1.8em; margin-bottom: 6px; }
+        .sub { color: #888; margin-bottom: 30px; }
+        .info { line-height: 2; margin-bottom: 25px; }
+        .info b { color: #333; }
+        a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 24px;
+            color: #fff;
+            background: #333;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.95em;
         }
-        .info-box {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-        .info-box h2 {
-            color: #667eea;
-            font-size: 1.2em;
-            margin-bottom: 15px;
-        }
-        .info-box ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        .info-box li {
-            padding: 8px 0;
-            color: #555;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        .info-box li:last-child {
-            border-bottom: none;
-        }
-        .info-box li::before {
-            content: "✓";
-            color: #28a745;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .tech-tag {
-            background: #667eea;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-        }
+        a:hover { background: #555; }
         .footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #999;
-            font-size: 0.9em;
-        }
-        .success-icon {
-            font-size: 4em;
-            text-align: center;
-            margin-bottom: 20px;
+            margin-top: 50px;
+            font-size: 0.8em;
+            color: #bbb;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="success-icon">🚀</div>
-        <h1>恭喜！</h1>
-        <p class="subtitle">你的HTTP服务器运行成功</p>
-        
-        <div class="info-box">
-            <h2>项目特性</h2>
-            <ul>
-                <li>基于 epoll 事件驱动模型</li>
-                <li>支持 GET / HEAD 请求方法</li>
-                <li>非阻塞 IO 高并发处理</li>
-                <li>HTTP/1.1 Keep-Alive 支持</li>
-                <li>自动 MIME 类型识别</li>
-                <li>连接超时自动管理</li>
-                <li>信号处理优雅关闭</li>
-            </ul>
-        </div>
-        
-        <div class="info-box">
-            <h2>技术栈</h2>
-            <div class="tech-stack">
-                <span class="tech-tag">C语言</span>
-                <span class="tech-tag">Linux</span>
-                <span class="tech-tag">epoll</span>
-                <span class="tech-tag">Socket编程</span>
-                <span class="tech-tag">HTTP协议</span>
-                <span class="tech-tag">非阻塞IO</span>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>Simple HTTP Server v1.0.0</p>
-            <p> 嵌入式 | 2026</p>
-        </div>
+    <h1>Hope</h1>
+    <p class="sub">Embedded Linux Developer</p>
+
+    <div class="info">
+        <b>学校：</b>中南林业科技大学 · 通信工程<br>
+        <b>方向：</b>嵌入式 Linux 开发<br>
+        <b>状态：</b>2026 秋季校招备战中
     </div>
+
+    <a href="resume.html">查看我的简历 &rarr;</a>
+
+    <p class="footer">Powered by Epoll HTTP Server · Built with C</p>
 </body>
 </html>

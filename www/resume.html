@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>唐悦 - 嵌入式软件工程师</title>
+    <style>
+        body {
+            font-family: -apple-system, "Microsoft YaHei", sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .page {
+            max-width: 750px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+        /* 顶部 */
+        .header {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 40px 40px 30px;
+        }
+        .header h1 {
+            font-size: 2em;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .header .title {
+            font-size: 1.1em;
+            color: #8a8aaf;
+            margin-bottom: 18px;
+        }
+        .header .contact {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-size: 0.88em;
+            color: #aaa;
+        }
+        .header .contact span { white-space: nowrap; }
+        .header .contact a { color: #7eb8da; text-decoration: none; }
+        /* 主体 */
+        .body { padding: 35px 40px; }
+        /* 模块标题 */
+        .section-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 18px;
+            background: #1a1a2e;
+            border-radius: 2px;
+        }
+        .section + .section { margin-top: 32px; }
+        /* 教育 */
+        .edu-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+        .edu-school { font-weight: 600; font-size: 1em; }
+        .edu-date { color: #999; font-size: 0.85em; }
+        .edu-detail { color: #666; font-size: 0.9em; margin-top: 4px; line-height: 1.8; }
+        /* 技能 */
+        .skill-list { list-style: none; padding: 0; }
+        .skill-list li {
+            font-size: 0.9em;
+            color: #555;
+            line-height: 1.6;
+            padding: 5px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .skill-list li:last-child { border-bottom: none; }
+        .skill-list li::before {
+            content: "▸";
+            color: #1a1a2e;
+            margin-right: 8px;
+        }
+        /* 项目 */
+        .project { margin-bottom: 22px; }
+        .project:last-child { margin-bottom: 0; }
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+        .project-name { font-weight: 600; font-size: 0.95em; }
+        .project-date { color: #999; font-size: 0.83em; }
+        .project-desc {
+            list-style: none;
+            padding: 0;
+            margin-top: 6px;
+        }
+        .project-desc li {
+            font-size: 0.88em;
+            color: #555;
+            line-height: 1.7;
+            padding: 2px 0;
+            padding-left: 14px;
+            position: relative;
+        }
+        .project-desc li::before {
+            content: "·";
+            position: absolute;
+            left: 0;
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+        /* 自我评价 */
+        .summary {
+            font-size: 0.9em;
+            color: #555;
+            line-height: 1.8;
+            background: #fafafa;
+            padding: 16px 20px;
+            border-radius: 6px;
+            border-left: 3px solid #1a1a2e;
+        }
+        /* 底部 */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8em;
+            color: #bbb;
+        }
+        .back-link { color: #999; text-decoration: none; }
+        .back-link:hover { color: #333; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>唐悦</h1>
+            <p class="title">嵌入式软件工程师</p>
+            <div class="contact">
+                <span>21岁 · 湖南长沙</span>
+                <span>18670727876</span>
+                <span>hope2027@outlook.com</span>
+                <span><a href="https://github.com/hope5114-ty">GitHub</a></span>
+            </div>
+        </div>
+
+        <div class="body">
+            <!-- 教育背景 -->
+            <div class="section">
+                <h2 class="section-title">教育背景</h2>
+                <div class="edu-row">
+                    <span class="edu-school">中南林业科技大学 · 通信工程 · 本科</span>
+                    <span class="edu-date">2023.09 - 2027.06</span>
+                </div>
+                <p class="edu-detail">
+                    专业排名前 15%，获校级奖学金（2023-2024、2024-2025 学年）<br>
+                    主修：C 语言程序设计、数据结构与算法、嵌入式系统设计、单片机原理、计算机网络
+                </p>
+            </div>
+
+            <!-- 专业技能 -->
+            <div class="section">
+                <h2 class="section-title">专业技能</h2>
+                <ul class="skill-list">
+                    <li>熟练掌握 C 语言，熟悉指针、内存管理、位操作、数据结构</li>
+                    <li>熟悉 Linux 环境编程，掌握多线程、网络编程（Socket）、进程间通信</li>
+                    <li>熟悉数据结构与算法，累计刷题 200+，具备扎实的编程基础</li>
+                    <li>了解 STM32 嵌入式开发，有 FSMC 驱动 LCD 屏幕项目经验</li>
+                    <li>了解 TCP/IP 协议栈，理解三次握手、四次挥手、HTTP 协议</li>
+                    <li>了解操作系统基础，理解进程调度、内存管理、死锁机制</li>
+                    <li>英语 CET-4，具备基本的英文技术文档阅读能力</li>
+                </ul>
+            </div>
+
+            <!-- 项目经历 -->
+            <div class="section">
+                <h2 class="section-title">项目经历</h2>
+
+                <div class="project">
+                    <div class="project-header">
+                        <span class="project-name">基于 Linux 的轻量级 HTTP 服务器</span>
+                        <span class="project-date">2026.08 - 至今</span>
+                    </div>
+                    <ul class="project-desc">
+                        <li>基于 Socket 编程实现 TCP 服务端，使用 epoll + 线程池模型处理并发连接</li>
+                        <li>采用 ET 模式 + 非阻塞 IO 解决 HTTP 粘包问题，支持数十并发连接</li>
+                        <li>实现 HTTP GET/POST 请求解析、静态资源返回及 404/500 错误码处理</li>
+                        <li>模块化设计，解析器、处理器、响应器分离，便于维护和扩展</li>
+                    </ul>
+                </div>
+
+                <div class="project">
+                    <div class="project-header">
+                        <span class="project-name">打印机任务调度仿真系统</span>
+                        <span class="project-date">2026.03 - 2026.06</span>
+                    </div>
+                    <ul class="project-desc">
+                        <li>基于 C 语言实现优先级调度算法，支持动态优先级调整</li>
+                        <li>设计防饥饿机制，任务等待超时自动提升优先级</li>
+                        <li>采用链表管理任务队列，支持动态增删和优先级排序</li>
+                        <li>实现用户交互界面，支持任务添加、删除、暂停、查看状态等操作</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 自我评价 -->
+            <div class="section">
+                <h2 class="section-title">自我评价</h2>
+                <p class="summary">
+                    通信工程本科生，专注于嵌入式 Linux 开发方向。熟练掌握 C 语言，熟悉 Linux 多线程/网络编程，累计刷题 200+。独立完成 HTTP 服务器和任务调度系统等项目。求职嵌入式软件工程师岗位。
+                </p>
+            </div>
+        </div>
+
+        <!-- 底部 -->
+        <div class="footer">
+            <a href="index.html" class="back-link">&larr; 返回首页</a>
+        </div>
+    </div>
+</body>
+</html>
