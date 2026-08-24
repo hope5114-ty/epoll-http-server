@@ -36,7 +36,7 @@ typedef struct {
     
     // 常用头部的快捷访问
     char host[MAX_HEADER_VALUE];          // Host头部
-    char connection[MAX_HEADER_VALUE];    // Connection头部（keep-alive/close）
+    int keep_alive;    // Connection头部（keep-alive/close）
     int content_length;                   // Content-Length头部
 } http_request_t;
 
