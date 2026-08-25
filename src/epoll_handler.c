@@ -252,6 +252,8 @@ void epoll_handler_accept(int epoll_fd, int listen_fd)
     }
 }
 
+static void worker_process_request(void *arg);
+
 // 主线程派发任务：把客户端IO任务交给线程池
 void epoll_handler_dispatch(int epoll_fd, int client_fd)
 {

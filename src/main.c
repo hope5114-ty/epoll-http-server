@@ -1,6 +1,5 @@
-#include "server.h" //包含server_init(),server_run()
-#include "utils.h"  //包含log_info(),log_error()
-
+#include "server.h"
+#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,7 +9,8 @@
 // 程序版本号
 #define VERSION "1.0.0"
 
-// 打印命令行帮助信息
+// 打印命令行帮助使用说明
+// program_name：程序可执行文件名
 static void print_usage(const char *program_name)
 {
     printf("Simple HTTP Server v%s\n\n", VERSION);
@@ -19,29 +19,31 @@ static void print_usage(const char *program_name)
     printf("  -p, --port <端口>       监听端口（默认8080）\n");
     printf("  -r, --root <目录>       网站根目录（默认./www）\n");
     printf("  -m, --max <连接数>      最大连接数（默认1024）\n");
+    printf("  -t, --threads <线程数>  工作线程数（默认4）\n");
     printf("  -h, --help              显示帮助信息\n");
     printf("\n示例:\n");
     printf("  %s -p 8080 -r ./www\n", program_name);
     printf("  %s --port 9000 --root /var/www/html\n", program_name);
 }
 
-// 程序入口
+// 程序入口，解析命令行参数、填充配置、校验目录、启动http服务器
 int main(int argc, char *argv[])
 {
-    // 填充默认服务器配置
+    // 填充服务器默认配置
     server_config_t config = {
-        .port = DEFAULT_PORT,         // 默认端口8080
-        .max_connections = MAX_EVENTS // 最大连接数1024
+        .port = DEFAULT_PORT,
+        .max_connections = MAX_EVENTS,
+        .thread_count = DEFAULT_THREAD_COUNT
     };
     strncpy(config.web_root, DEFAULT_WEB_ROOT, sizeof(config.web_root) - 1);
 
-    // 手动解析命令行参数，不依赖getopt_long
+    // 手动解析命令行参数，不依赖getopt_long库
     int i = 1;
     while (i < argc)
     {
-        // 当前参数为-p/--port 下一个参数为端口号
         if (strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--port") == 0)
         {
+            // 解析监听端口
             if (i + 1 >= argc)
             {
                 fprintf(stderr, "错误: -p/--port 需要指定端口号\n");
@@ -57,6 +59,7 @@ int main(int argc, char *argv[])
         }
         else if (strcmp(argv[i], "-r") == 0 || strcmp(argv[i], "--root") == 0)
         {
+            // 解析网页根目录
             if (i + 1 >= argc)
             {
                 fprintf(stderr, "错误: -r/--root 需要指定目录路径\n");
@@ -67,6 +70,7 @@ int main(int argc, char *argv[])
         }
         else if (strcmp(argv[i], "-m") == 0 || strcmp(argv[i], "--max") == 0)
         {
+            // 解析最大并发连接数
             if (i + 1 >= argc)
             {
                 fprintf(stderr, "错误: -m/--max 需要指定连接数\n");
@@ -77,6 +81,22 @@ int main(int argc, char *argv[])
             if (config.max_connections <= 0 || config.max_connections > MAX_EVENTS)
             {
                 fprintf(stderr, "错误: 最大连接数无效（1-%d）\n", MAX_EVENTS);
+                return 1;
+            }
+        }
+        else if (strcmp(argv[i], "-t") == 0 || strcmp(argv[i], "--threads") == 0)
+        {
+            // 解析线程池工作线程数量
+            if (i + 1 >= argc)
+            {
+                fprintf(stderr, "错误: -t/--threads 需要指定线程数\n");
+                return 1;
+            }
+            i++;
+            config.thread_count = atoi(argv[i]);
+            if (config.thread_count <= 0 || config.thread_count > 64)
+            {
+                fprintf(stderr, "错误: 线程数无效（1-64）\n");
                 return 1;
             }
         }
@@ -94,16 +114,17 @@ int main(int argc, char *argv[])
         i++;
     }
 
-    // 输出启动配置信息
+    // 输出服务器启动配置信息
     log_info("===========================================");
     log_info("  Simple HTTP Server v%s", VERSION);
     log_info("===========================================");
     log_info("端口: %d", config.port);
     log_info("根目录: %s", config.web_root);
     log_info("最大连接: %d", config.max_connections);
+    log_info("工作线程: %d", config.thread_count);
     log_info("-------------------------------------------");
 
-    // 校验网站根目录是否可读，使用open方式检测
+    // open校验网站根目录是否可读，不使用access函数
     int dir_fd = open(config.web_root, O_RDONLY);
     if (dir_fd == -1)
     {
@@ -113,7 +134,7 @@ int main(int argc, char *argv[])
     }
     close(dir_fd);
 
-    // 初始化TCP监听socket
+    // 创建socket、bind、listen得到监听fd
     int listen_fd = server_init(&config);
     if (listen_fd == -1)
     {
@@ -121,7 +142,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    // 启动epoll事件主循环，阻塞运行直至收到退出信号
+    // 进入epoll主循环，函数阻塞直到收到退出信号
     server_run(listen_fd, &config);
 
     return 0;
