@@ -3,7 +3,7 @@
 
 CC = gcc
 CFLAGS = -Wall -Wextra -I./include
-LDFLAGS =
+LDFLAGS = -lpthread
 
 # 源文件和目标文件
 SRC_DIR = src
