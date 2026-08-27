@@ -41,4 +41,7 @@ void epoll_handler_close(int epoll_fd, int client_fd);
 // 遍历检测，关闭超时的客户端连接，主线程定时调用
 void epoll_handler_check_timeout(int epoll_fd);
 
+/* 获取当前在线连接数（供 /status 接口调用） */
+int epoll_handler_get_connection_count(void);
+
 #endif // EPOLL_HANDLER_H

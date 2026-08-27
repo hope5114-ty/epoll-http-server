@@ -474,3 +474,20 @@ void epoll_handler_check_timeout(int epoll_fd)
     }
     pthread_mutex_unlock(&connections_mutex);
 }
+
+// 获取当前在线连接数
+int epoll_handler_get_connection_count(void) {
+    int count = 0;
+
+    pthread_mutex_lock(&connections_mutex);
+
+    for (int i = 0; i < MAX_EVENTS; i++) {
+        if (connections[i] != NULL) {
+            count++;
+        }
+    }
+
+    pthread_mutex_unlock(&connections_mutex);
+
+    return count;
+}

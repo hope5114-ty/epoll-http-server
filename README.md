@@ -85,6 +85,8 @@ http_server/
 │   ├── http_request.h
 │   ├── http_response.c     # HTTP响应构建：状态行、响应头
 │   ├── http_response.h
+│   ├── thread_pool.c       # 线程池任务处理
+│   ├── thread_pool.h
 │   ├── mime.c              # MIME类型映射
 │   ├── mime.h
 │   ├── utils.c             # 工具函数：日志

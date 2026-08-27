@@ -2,12 +2,19 @@
 #include "http_response.h"
 #include "mime.h"
 #include "utils.h"
+#include "epoll_handler.h" 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+
+/* 服务器第一次收到请求的时间，用来计算运行时长（uptime） */
+static time_t server_start_time = 0;
+
+/* 累计处理的请求总数，多线程下用原子操作递增，不需要加锁 */
+static long total_requests = 0;
 
 // 辅助函数
 
@@ -192,21 +199,68 @@ static int handle_head(const char *uri, client_connection_t *conn,
 // conn：客户端连接
 // config：服务器配置
 // return：成功返回0，失败返回-1
-int http_handle_request(const http_request_t *request, client_connection_t *conn,
-                        const server_config_t *config) {
+int http_handle_request(const http_request_t *request, client_connection_t *conn, const server_config_t *config) {
+
+    /* ===== 服务器启动时间：第一次收到请求时记录 ===== */
+    if (server_start_time == 0) {
+        server_start_time = time(NULL);
+    }
+
+    /* 总请求数 +1（原子操作，多线程安全，下面单独讲） */
+    __atomic_fetch_add(&total_requests, 1, __ATOMIC_SEQ_CST);
+
     log_info("处理请求: %s %s", request->method, request->uri);
 
-    // 根据请求方法分发任务
+    /* ===== /status 接口：返回服务器运行状态（JSON格式）===== */
+    if (strcmp(request->method, "GET") == 0 &&
+        strcmp(request->uri, "/status") == 0) {
+
+        /* 从连接表获取当前在线连接数 */
+        int current_conns = epoll_handler_get_connection_count();
+
+        /* 计算服务器已运行秒数 */
+        long uptime = (long)(time(NULL) - server_start_time);
+
+        /* 原子读取总请求数 */
+        long req_count = __atomic_load_n(&total_requests, __ATOMIC_SEQ_CST);
+
+        /* 拼 JSON 响应体 */
+        char json_body[256];
+        int body_len = snprintf(json_body, sizeof(json_body),
+            "{\"connections\":%d,\"total_requests\":%ld,"
+            "\"thread_pool_size\":%d,\"uptime\":%ld}",
+            current_conns, req_count, config->thread_count, uptime);
+
+        /* 拼 HTTP 响应头 */
+        int header_len = snprintf(conn->write_buf, BUFFER_SIZE * 4,
+            "HTTP/1.1 200 OK\r\n"
+            "Server: SimpleHTTP/1.0\r\n"
+            "Content-Type: application/json\r\n"
+            "Content-Length: %d\r\n"
+            "Connection: %s\r\n"
+            "\r\n",
+            body_len,
+            conn->keep_alive ? "keep-alive" : "close");
+
+        // 把 JSON body 拷到响应头后面
+        memcpy(conn->write_buf + header_len, json_body, body_len);
+
+        // 设置写缓冲区长度，worker 线程会发出去
+        conn->write_pos = 0;
+        conn->write_len = header_len + body_len;
+
+        log_info("返回状态: 连接数=%d, 总请求=%ld", current_conns, req_count);
+        return 0;
+    }
+
     if (strcmp(request->method, "GET") == 0) {
         return handle_get(request->uri, conn, config);
     } else if (strcmp(request->method, "HEAD") == 0) {
         return handle_head(request->uri, conn, config);
     } else if (strcmp(request->method, "POST") == 0) {
-        // POST方法暂未实现
         http_send_error(conn, 501, "Not Implemented");
         return -1;
     } else {
-        // 不支持的请求方法
         http_send_error(conn, 405, "Method Not Allowed");
         return -1;
     }
